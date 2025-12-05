@@ -1,35 +1,63 @@
 <?php
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/header.php';
-
-$pcs = pdo()->query('SELECT id, name, image_url, price FROM pcs ORDER BY id')->fetchAll();
 ?>
-<h1>Nos PC</h1>
-<section class="grid">
-<?php foreach ($pcs as $pc): ?>
-  <article class="card">
-    <img src="<?= e($pc['image_url']) ?>" alt="Photo de <?= e($pc['name']) ?>">
-    <div class="p">
-      <h3><?= e($pc['name']) ?></h3>
-      <p class="price"><?= number_format((float)$pc['price'], 2, ',', ' ') . ' ' . CURRENCY ?></p>
-      <details>
-        <summary>Voir les composants</summary>
-        <ul>
-          <?php
-            $stmt = pdo()->prepare('
-              SELECT c.name
-              FROM pc_components pc
-              JOIN components c ON c.id = pc.component_id
-              WHERE pc.pc_id = ?
-            ');
-            $stmt->execute([(int)$pc['id']]);
-            foreach ($stmt->fetchAll() as $row): ?>
-              <li><?= e($row['name']) ?></li>
-          <?php endforeach; ?>
-        </ul>
-      </details>
-    </div>
-  </article>
-<?php endforeach; ?>
-</section>
+
+<html>
+  <header>
+    <h1>Bienvenue chez TechSolutions</h1>
+  </header>
+
+  <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+        }
+        header {
+            background: #0a74da;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        .body {
+            width: 80%;
+            margin: 30px auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        h1{
+            color: #ffffffff;
+        }
+        h2 {
+            color: #0a74da;
+        }
+        p {
+            line-height: 1.6;
+        }
+    </style>
+<div class="body">
+    <h2>Présentation de l'entreprise</h2>
+    <p>
+        <strong>TechSolutions</strong> est une entreprise spécialisée dans les <strong>services informatiques</strong>.  
+        Située au <strong>12 rue des Innovateurs, 19100 Brive-la-Gaillarde</strong>, elle accompagne ses clients dans la mise en place de solutions technologiques 
+        modernes, performantes et sécurisées.
+    </p>
+    <p>
+        Notre équipe d'experts propose une large gamme de services et saura <strong>vous conseiller au mieux</strong> selon vos besoins. De l'<strong>assemblage de votre pc</strong>, 
+        l'<strong>installation de systèmes et logiciels</strong> jusqu'à la <strong>maintenance de votre matériel informatique</strong>, nous sommes là pour vous aider.
+    </p>
+
+    <p>
+        Nous sommes également fiers de notre <strong>culture inclusive</strong>.  
+        TechSolutions met un point d’honneur à accueillir et soutenir les <strong>personnes en situation de handicap</strong>,  
+        en adaptant les postes de travail et l’environnement professionnel afin de répondre au mieux à leurs besoins.
+    </p>
+</div>
+
+</body>
+</html>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

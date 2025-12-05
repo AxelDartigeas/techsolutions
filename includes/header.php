@@ -6,6 +6,6 @@
 <header class="site-header">
   <div class="container">
     <div class="brand"><span class="logo">TS</span><span class="name"><?= SITE_NAME ?></span></div>
-    <nav class="menu"><a href="index.php">Accueil</a><a href="services.php">Services</a><a href="contact.php">Contact</a></nav>
+    <nav class="menu"><a href="index.php">Accueil</a><a href="services.php">Services</a><a href="actualites.php">Actualités</a><a href="contact.php">Contact</a></nav>
   </div>
 </header><main class="container">
