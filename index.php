@@ -16,9 +16,9 @@ require_once __DIR__ . '/includes/header.php';
             background: #f4f4f4;
         }
         header {
-            background: #0a74da;
+            background: #1e293b;
             color: #fff;
-            padding: 10px;
+            padding: 1px;
             text-align: center;
         }
         .body {
@@ -33,7 +33,7 @@ require_once __DIR__ . '/includes/header.php';
             color: #ffffffff;
         }
         h2 {
-            color: #0a74da;
+            color: #1e293b;
         }
         p {
             line-height: 1.6;

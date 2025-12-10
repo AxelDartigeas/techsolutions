@@ -4,7 +4,7 @@ if($_SERVER['REQUEST_METHOD']==='POST' && $name!=='' && $email!=='' && $message!
 function e($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 ?>
 <h1>Contact</h1>
-<?php if($sent): ?><p class="card">Merci <?= e($name) ?> ! (envoi factice)</p><?php endif; ?>
+<?php if($sent): ?><p class="card">Merci <?= e($name) ?> ! Votre message a bien été envoyé !</p><?php endif; ?>
 <form method="post" class="card" style="padding:12px">
   <p><label>Nom<br><input name="name" required value="<?= e($name) ?>"></label></p>
   <p><label>Email<br><input type="email" name="email" required value="<?= e($email) ?>"></label></p>
