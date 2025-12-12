@@ -57,7 +57,6 @@ require_once __DIR__ . '/includes/header.php';
         en adaptant les postes de travail et l’environnement professionnel afin de répondre au mieux à leurs besoins.
     </p>
 </div>
-
 </body>
 </html>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

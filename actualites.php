@@ -35,9 +35,32 @@ $pcs = pdo()->query('SELECT id, name, image_url, price FROM pcs ORDER BY id')->f
   </article>
 <?php endforeach; ?>
 </section>
+<style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+        }
+        header {
+            background: #1e293b;
+            color: #fff;
+            padding: 1px;
+            text-align: center;
+        }
+.body {
+            width: 80%;
+            margin: 30px auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+</style>
 <u>
 <h2>Actualités</h2>
 </u>
+<div class="body">
 <h3>-Lancement de notre nouveau site web</h3>
 <p>
   Nous sommes ravis de vous annoncer le lancement de notre nouveau site web !  
@@ -45,10 +68,10 @@ $pcs = pdo()->query('SELECT id, name, image_url, price FROM pcs ORDER BY id')->f
 </p>
 <h3>-Don de matériel informatique</h3>
 <p>
-TechSolutions ayant récemment actualisé son parc informatique. Afin de ne pas gaspiller de matériel encore fonctionnel, l'entreprise a décidé de faire un don à une école locale ainsi qu'à des associations caritatives dans le besoin.
+TechSolutions ayant récemment actualisé son parc informatique. Afin de ne pas gaspiller de matériel encore fonctionnel, l'entreprise a décidé de faire don de ses anciens équipement à une école locale ainsi qu'à des associations caritatives dans le besoin.
 <h3>-Augmentation des effectifs de l'entreprise</h3>
 <p>
-  Grace à l'expension de l'entreprise et afin de mieux répondre à vos besoins, TechSolutions a le plaisir d'annoncer l'augmentation de ses effectifs avec l'embauche de 10 nouveaux collaborateurs dans les domaines du développement, du support client et du marketing.
+  Grâce à l'expension de l'entreprise et afin de mieux répondre à vos besoins, TechSolutions a le plaisir d'annoncer l'augmentation de ses effectifs avec le recrutement de 10 nouveaux collaborateurs dans les domaines du développement, du support client et du marketing.
 </p>
   <h3>-Ouverture d'une nouvelle agence</h3>
 <p>
