@@ -1,119 +1,118 @@
 <?php
+require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/header.php';
+
 session_start();
 
-/* ===== CONFIG ===== */
-$admin_user = "admin";
-$admin_pass = "admin123";
 
-$pages = [
-    "accueil"     => "accueil.php",
-    "service"     => "service.php",
-    "actualites"  => "actualites.php",
-    "contact"     => "contact.php"
+// ---- CONFIG ----
+$PASSWORD = "admin123";
+$PAGES = [
+"index.php" => "Accueil",
+"actualites.php" => "Actualités",
+"services.php" => "Services",
+"contact.php" => "Contact"
 ];
 
-/* ===== FONCTIONS ===== */
-function loadPage($file, $defaultTitle) {
-    if (!file_exists($file)) {
-        $default = [
-            "title" => $defaultTitle,
-            "content" => "Contenu par défaut de la page " . $defaultTitle
-        ];
-        file_put_contents($file, json_encode($default, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        return $default;
-    }
-    return json_decode(file_get_contents($file), true);
+
+// ---- LOGIN HANDLING ----
+if (isset($_POST['password'])) {
+if ($_POST['password'] === $PASSWORD) {
+$_SESSION['admin'] = true;
+} else {
+$error = "Mot de passe incorrect";
+}
 }
 
-function savePage($file, $data) {
-    file_put_contents($file, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+// ---- SAVE CHANGES ----
+if (isset($_SESSION['admin'], $_POST['page'], $_POST['content'])) {
+$page = $_POST['page'];
+if (array_key_exists($page, $PAGES)) {
+file_put_contents($page, $_POST['content']);
+$message = "Page mise à jour avec succès";
+}
 }
 
-/* ===== LOGIN ===== */
-if (isset($_POST["login"])) {
-    if ($_POST["user"] === $admin_user && $_POST["pass"] === $admin_pass) {
-        $_SESSION["admin"] = true;
-    } else {
-        $error = "Identifiants incorrects";
-    }
+// ---- LOGOUT ----
+if (isset($_GET['logout'])) {
+session_destroy();
+header("Location: admin.php");
+exit;
 }
 
-/* ===== LOGOUT ===== */
-if (isset($_GET["logout"])) {
-    session_destroy();
-    header("Location: admin.php");
-    exit;
-}
 
-/* ===== PAGE SÉLECTIONNÉE ===== */
-$current = $_GET["page"] ?? "accueil";
-if (!isset($pages[$current])) {
-    $current = "accueil";
-}
-
-/* ===== SAUVEGARDE ===== */
-if (isset($_POST["save"]) && isset($_SESSION["admin"])) {
-    $data = [
-        "title"   => $_POST["title"],
-        "content" => $_POST["content"]
-    ];
-    savePage($pages[$current], $data);
-}
-
-/* ===== CHARGEMENT ===== */
-$data = loadPage($pages[$current], ucfirst($current));
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <title>Admin - Gestion des pages</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 30px; }
-        input, textarea, button, select { width: 100%; padding: 10px; margin: 5px 0; }
-        .box { max-width: 700px; margin: auto; background: #f5f5f5; padding: 20px; }
-        .nav a { margin-right: 10px; text-decoration: none; font-weight: bold; }
-    </style>
+<meta charset="UTF-8">
+<title>Administration</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 0px; }
+textarea { width: 100%; height: 500px; }
+.login-box { width: 300px; margin: 150px auto; }
+</style>
 </head>
 <body>
 
-<div class="box">
 
-<?php if (!isset($_SESSION["admin"])): ?>
+<?php if (!isset($_SESSION['admin'])): ?>
 
-    <!-- ===== LOGIN ===== -->
-    <h2>Connexion Administrateur</h2>
-    <?php if (!empty($error)) echo "<p style='color:red'>$error</p>"; ?>
-    <form method="post">
-        <input type="text" name="user" placeholder="Utilisateur" required>
-        <input type="password" name="pass" placeholder="Mot de passe" required>
-        <button type="submit" name="login">Connexion</button>
-    </form>
+
+<div class="login-box">
+<h2>Connexion Admin</h2>
+<?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
+<form method="POST">
+<label>Mot de passe :</label><br>
+<input type="password" name="password" required><br><br>
+<button type="submit">Se connecter</button>
+</form>
+</div>
+
 
 <?php else: ?>
 
-    <!-- ===== ADMIN PANEL ===== -->
-    <h2>Panneau d'administration</h2>
-    <a href="?logout=1">Déconnexion</a>
 
-    <div class="nav" style="margin:15px 0;">
-        <a href="accueil.php">Accueil</a>
-        <a href="services.php">Service</a>
-        <a href="actualites.php">Actualités</a>
-        <a href="contact.php">Contact</a>
-    </div>
+<h1>Panneau d'administration</h1>
+<p><a href="?logout=1">Se déconnecter</a></p>
 
-    <h3>Modifier la page : <?= ucfirst($current) ?></h3>
 
-    <form method="post">
-        <input type="text" name="title" value="<?= htmlspecialchars($data["title"]) ?>" required>
-        <textarea name="content" rows="10"><?= htmlspecialchars($data["content"]) ?></textarea>
-        <button type="submit" name="save">Enregistrer</button>
-    </form>
+<?php if (!empty($message)) echo "<p style='color:green;'>$message</p>"; ?>
+
+
+<form method="POST">
+<label>Choisir une page à modifier :</label><br>
+<select name="page" onchange="this.form.submit()">
+<option value="">-- Sélectionner --</option>
+<?php
+foreach ($PAGES as $file => $label) {
+$selected = (isset($_POST['page']) && $_POST['page'] === $file) ? 'selected' : '';
+echo "<option value='$file' $selected>$label ($file)</option>";
+}
+?>
+</select>
+</form>
+
+
+<?php if (isset($_POST['page']) && array_key_exists($_POST['page'], $PAGES)): ?>
+<?php $content = htmlspecialchars(file_get_contents($_POST['page'])); ?>
+
+
+<h2>Modifier : <?= $PAGES[$_POST['page']] ?></h2>
+
+
+<form method="POST">
+<input type="hidden" name="page" value="<?= $_POST['page'] ?>">
+<textarea name="content"><?= $content ?></textarea>
+<br><br>
+<button type="submit">Enregistrer</button>
+</form>
+<?php endif; ?>
+
 
 <?php endif; ?>
 
-</div>
 
 </body>
 </html>
